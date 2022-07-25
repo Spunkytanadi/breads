@@ -4,17 +4,19 @@ const Bread = require('../models/bread.js')
 
 // INDEX
 breads.get('/', (req, res) => {
-    res.render('Index',
-      {
-            breads: Bread         
-      }
-    )
+  res.render('index', 
+   {
+    breads: Bread
+   }
+  )
+//res.send (Bread)
 })
-
-
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
-    res.send(Bread[req.params.arrayIndex])
+    res.render('show', {
+      bread: Bread[req.params.arrayIndex]
+    })
   })
+  
 
 module.exports = breads
