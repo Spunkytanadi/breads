@@ -24,3 +24,10 @@ app.use('/breads', breadsController)
 app.listen(PORT, () => {
   console.log('listening on port', PORT);
 })
+
+// 404 Page
+app.get('*', (req, res) => {
+  res.send('404')
+})
+
+app.use(express.urlencoded({extenden: true}))
