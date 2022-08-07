@@ -1,8 +1,9 @@
 const React = require('react')
+const baker_seed = require('../models/baker_seed')
 const bread = require('../models/bread')
-const Default = require('./layouts/Default')
+const Default = require('./layouts/default')
 
-function Edit ({bread, index}) {
+function Edit ({bread, bakers}) {
     return (
       <Default>
         <h2>Edit a bread</h2>
@@ -24,12 +25,11 @@ function Edit ({bread, index}) {
             />
             <label htmlFor="baker">Baker</label>
             <select name="baker" id="baker" defaultValue={bread.baker}>
-              <option value="Rachel">Rachel</option>
-              <option value="Monica">Monica</option>
-              <option value="Joey">Joey</option>
-              <option value="Chandler">Chandler</option>
-              <option value="Ross">Ross</option>
-              <option value="Phoebe">Phoebe</option>
+              {bakers.map((baker) => {
+                return(
+                  <option value={baker.id} key={baker.id}>{baker.name}</option>
+                )
+              })}
             </select>
           <label htmlFor="hasGluten">Has Gluten?</label>
           <input

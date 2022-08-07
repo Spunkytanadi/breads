@@ -2,7 +2,12 @@ const React = require('react');
 const Default = require('.layouts/Default');
 const breads = require('../controllers/breads_controller');
 
-function Show ({bread, index}) {
+// helper methods 
+breadSchema.methods.getBakedBy = function(){
+    return `${this.name} was baked with love by ${this.baker}`
+  }  
+
+function Show ({bread}) {
     console.log(bread.name)
         return (
             <Default>
@@ -18,13 +23,11 @@ function Show ({bread, index}) {
                         have gluten
                     </p>
                     <img src={bread.image} alt={bread.name}/>
-                        <p>Baked by {breads.baker}</p>
-                        <li><a href="/breads"><button>Go home</button></a></li>
-                        <a href={`/breads/${bread.id}/edit`}></a>
-                        <a href={`/breads/${bread.id}/edit`}><button>Edit</button></a>
-                        <form action={`/breads/${bread.id}?_method=DELETE`} method="POST">
-                            <input type='submit' value="DELETE"/>
-                        </form>
+                    <p>{bread.getBakedBy()}</p>
+                    <a href={`/breads/${bread.id}/edit`}><button>Edit</button></a>
+                    <form action={`/breads/${bread.id}?_method=DELETE`} method="POST">
+                        <input type='submit' value="DELETE"/>
+                    </form>
                 </Default>
         )
 }

@@ -1,13 +1,13 @@
 const express = require('express')
-const req = require('express/lib/request')
-const res = require('express/lib/response')
 const breads = express.Router()
 const Bread = require('../models/bread.js')
+const Baker = require('../models/baker.js')
 
+// INDEX
 breads.get('/', (req, res) => {
   Bread.find()
   .then(foundBreads => {
-      res.render ('index', {
+      res.render ('Index', {
         breads: foundBreads,
         title: 'Index Page'
       })
@@ -16,22 +16,25 @@ breads.get('/', (req, res) => {
 
 // NEW
 breads.get('/new', (req, res) => {
-  res.render('new')
+  res.render('new', {
+  })
 })
 
 // SHOW
-function Show({bread, index}) {
-  breads.get('/:arrayIndex', (req, res) => {
-    if (Bread[req.params.arrayIndex]) {
-      res.render('Show', {
-        bread:Bread[req.params.arrayIndex],
-        index: req.params.arrayIndex,
-      })
-    } else {
-      res.render('404')
-    }
+breads.get('/:id', (req, res) => {
+  Bread.findById(req.params.id)
+    .populate('baker')
+    .then(foundBread => {
+      const bakedBy = foundBread.getBakedBy()
+      console.log(bakedBy)
+      res.render('show', {
+        bread: foundBread
+    })
   })
-}
+  .catch(err => {
+    res.send('404')
+  })
+})
 
 // CREATE
 breads.post('/', (req, res) => {
@@ -40,11 +43,11 @@ breads.post('/', (req, res) => {
     req.body.image = undefined
   }
   if(req.body.hasGluten === 'on') {
-    req.body.hasGluten = true
+    req.body.hasGluten = 'true'
   } else {
-    req.body.hasGluten = false
+    req.body.hasGluten = 'false'
   }
-  Bread.create(req.body)
+  Bread.push(req.body)
   res.redirect('/breads')
 })
 
@@ -59,9 +62,9 @@ breads.delete('/:id', (req, res) => {
 // UPDATE
 breads.put('/:id', (req, res) => {
   if(req.body.hasGluten === 'on'){
-    req.body.hasGluten = true
+    req.body.hasGluten = 'true'
   } else {
-    req.body.hasGluten = false
+    req.body.hasGluten = 'false'
   }
   Bread.findByIdAndUpdate(req.params.id, req.body, { new: true }) 
     .then(updatedBread => {
@@ -73,24 +76,26 @@ breads.put('/:id', (req, res) => {
 
 // EDIT
 breads.get('/:id/edit', (req, res) => {
-  Bread.findById(req.params.id)
-  .then(foundBread => {
-    res.render('edit', {
-      bread: foundBread
-    })
-  })
-})
-
-breads.get('/:id/edit', (req, res) => {
-  Bread.findById(req.params.id)
+  Baker.find()
+  .then(foundBakers => {
+    Bread.findById(req.params.id)
       .then(foundBread => {
-          res.render('show', {
-              bread: foundBread
+          res.render('edit', {
+              bread: foundBread,
+              bakers: foundBakers
           })
       })
-      .catch(err => {
-        res.send('404')
+    })
+})
+
+// in the new route
+breads.get('/new', (req, res) => {
+  Baker.find()
+    .then(foundBakers => {
+      res.render('new', {
+        bakers:foundBakers
       })
+    })
 })
 
 

@@ -6,10 +6,10 @@ function Index ({breads, title}) {
     return (
       <Default title={title}>
         <h2>Index Page</h2>
+        {/*<p>I have {breads[0].name} bread!</p>*/}
+        {/* This is a JSX comment.*/}
         <div className="newButton">
-          <a href="/breads/new">
-            <button>Add a new bread</button>
-          </a>
+          <a href="/breads/new"><button>Add a new bread</button></a>
         </div>
         <ul>
             {
